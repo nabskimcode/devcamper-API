@@ -6,9 +6,13 @@ const {getBootcamps,
         getBootcamp,
        createBootcamp, 
       updateBootcamp,
-       deleteBootcamp}
+       deleteBootcamp,
+      getBootcampsInRadius,}
      = require('../controllers/bootcamps')
 
+
+ router.route('/radius/:zipcode/:distance')
+  .get(getBootcampsInRadius)
 
  router.route('/')
   .get(getBootcamps)
@@ -19,6 +23,7 @@ const {getBootcamps,
    .put(updateBootcamp)
    .delete(deleteBootcamp)
 
+  
 
 // router.get('/', (req,res) => {
 //     // res.send('Hello from the server');
@@ -45,9 +50,6 @@ const {getBootcamps,
 //     res.status(200).json({success: true, msg: `Delete bootcamp ${req.params.id}`});
 // });
 
-router.route('/')
-.get(getBootcamps)
-.post(createBootcamp)
 
 
 module.exports = router
