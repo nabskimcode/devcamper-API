@@ -5,6 +5,12 @@ const morgan = require('morgan');
 const colors = require('colors');
 const fileupload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require("express-rate-limit");
+const hpp = require('hpp');
+const cors = require('cors')
 const connetDB = require('./config/db');
 const errorHandler = require('./middleware/error');
 
@@ -41,6 +47,29 @@ if (process.env.NODE_ENV == 'development') {
 
 // File upload
 app.use(fileupload());
+
+// Sanitize data prevent nosql injection
+app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// Prevent XSS attacks (cross site scripting)
+app.use(xss())
+
+// Rate limiting when making request to api
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000, //10 mins
+    max: 100 //request limit
+});
+
+app.use(limiter);
+
+// Prevent http params pollution. HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
+app.use(hpp());
+
+// Enable CORS
+app.use(cors())
 
 //Set static folder
 app.use(express.static(path.join(__dirname, 'public')))

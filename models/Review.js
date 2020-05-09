@@ -31,9 +31,46 @@ const ReviewSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     }
-
 });
 
+// Prevent user from submitting more than one reveiw per bootcamp the 1 || -1 is to sire the field values in asc or desc order
+ReviewSchema.index({ bootcamp: 1, user: 1 }, { unique: true }); // prevent duplicate key values
+
+// mongoose Static method TO GET avg of rating and save 
+ReviewSchema.statics.getAverageRating = async function(bootcampId) {
+    // console.log('Calculating avg cost...'.blue);
+
+    const obj = await this.aggregate([
+        {
+           $match: { bootcamp: bootcampId }   
+        },
+        {
+            $group: {
+                _id: '$bootcamp',
+                averageRating: { $avg: '$rating' }
+            }
+        }
+    ]);
+
+    // console.log(obj)
+    try {
+        await this.model('Bootcamp').findByIdAndUpdate(bootcampId, {
+            averageRating: obj[0].averageRating
+        })
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+// call getAverage after save
+ReviewSchema.post('save', function() {
+    this.constructor.getAverageRating(this.bootcamp) 
+});
+
+// call getAverage before remove
+ReviewSchema.pre('remove', function() {
+    this.constructor.getAverageRating(this.bootcamp) 
+});
 
 
 module.exports = mongoose.model('Review', ReviewSchema);
