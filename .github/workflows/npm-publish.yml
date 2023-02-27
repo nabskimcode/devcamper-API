@@ -57,4 +57,20 @@ jobs:
         working-directory: config
       - name: 'Echo download path'
         run: echo ${{steps.download.outputs.download-path}}
+    
+  job_4_download:
+    runs-on: ubuntu-latest
+    needs: job_3_download_artifact
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3  
+      
+    # Test downloading a single artifact
+    - name: Download artifact A
+      uses: ./
+      with:
+        name: my-artifact
+        path: utils
+    
+    
         
