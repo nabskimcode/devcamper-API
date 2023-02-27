@@ -33,3 +33,16 @@ jobs:
         with:
           name: my-artifact
           path: models
+    
+  job_3_download_artifact:
+    name: Download artifact
+    needs: job2_test_artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact from job 1
+        uses: actions/download-artifact@v3
+        with:
+          name: my-artifact
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: config
