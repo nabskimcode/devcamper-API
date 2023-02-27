@@ -51,7 +51,7 @@ jobs:
         id: download
         with:
           name: my-artifact
-          path: https://github.com/nabskimcode/devcamper-API/tree/master/config
+          path: config
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: config
