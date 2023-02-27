@@ -42,7 +42,7 @@ jobs:
       - name: Download artifact from job 1
         uses: actions/download-artifact@v3
         with:
-          name: my-artifact
+          name: my-artifact-download
           path: config
       - name: Display structure of downloaded files
         run: ls -R
