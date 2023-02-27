@@ -41,10 +41,13 @@ jobs:
     steps:
       - name: Download artifact from job 1
         uses: actions/download-artifact@v3
+        id: download
         with:
           name: my-artifact
-          path: test-artifact
+          path: config
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: test-artifact
+        working-directory: config
+      - name: 'Echo download path'
+        run: echo ${{steps.download.outputs.download-path}}
         
