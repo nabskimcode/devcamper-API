@@ -40,27 +40,11 @@ jobs:
           mkdir -p test-artifact/test/artifact-A
   
     
-  job_3_download_artifact:
-    name: Download artifact
-    needs: job2_test_artifact
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download artifact from job 1
-        uses: actions/download-artifact@v3
-        id: download
-        with:
-          name: my-artifact
-          path: config
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: config
-      - name: 'Echo download path'
-        run: echo ${{steps.download.outputs.download-path}}
+ 
     
   job_4_download:
     runs-on: ubuntu-latest
-    needs: job_3_download_artifact
+    needs: job2_test_artifact
     steps:
     - name: Checkout
       uses: actions/checkout@v3  
