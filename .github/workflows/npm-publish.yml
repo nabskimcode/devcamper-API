@@ -36,6 +36,7 @@ jobs:
           path: models
           
       - uses: actions/checkout@v3
+      - run: echo test > deployment_test
       - name: Download artifact from job 1
         uses: actions/download-artifact@v3
         id: download
